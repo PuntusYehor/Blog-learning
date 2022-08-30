@@ -1,0 +1,21 @@
+.MyBtn {
+	margin: 5px 0px;
+	padding: 5px 15px;
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	text-align: center;
+	border: 1px solid teal;
+	border-radius: 5px;
+	background-color: teal;
+	color: white;
+	cursor: pointer;
+	font-size: 14px;
+	transition: all 0.3s ease 0s;
+}
+
+.MyBtn:hover,
+.MyBtn:active {
+	background-color: white;
+	color: teal;
+}
