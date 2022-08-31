@@ -13,8 +13,11 @@ function PostForm({ create }) {
 			...post,
 			id: Date.now()
 		}
-		create(newPost);
-		setPost({ title: "", body: "" });
+		if (post.title && post.body) {
+			create(newPost);
+			setPost({ title: "", body: "" });
+		}
+
 	}
 
 	return (

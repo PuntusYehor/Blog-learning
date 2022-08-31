@@ -1,18 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostList from "./components/PostList";
 import "./styles/App.css";
 import PostForm from "./components/PostForm";
+import PostFilter from "./components/PostFilter";
+import MyModal from "./components/UI/MyModal/MyModal";
+import MyButton from "./components/UI/MyButton/MyButton";
+import { usePosts } from "./components/hooks/usePosts";
+import axios from "axios";
 
 function App() {
-	const [posts, setPosts] = useState([
-		{ id: 1, title: "Javascript", body: "Js - язык программирования" },
-		{ id: 2, title: "Javascript", body: "Js - язык программирования" },
-		{ id: 3, title: "Javascript", body: "Js - язык программирования" }
-	]);
+	const [posts, setPosts] = useState([]);
+
+	const [filter, setFilter] = useState({ sort: '', query: '' });
+	const [modal, setModal] = useState(false);
+
+	const filteredAndSortedPosts = usePosts(filter.sort, filter.query, posts);
+
+	const baseUrl = "https://jsonplaceholder.typicode.com/posts";
+
+	const fetchPosts = async (baseUrl) => {
+		const posts = await axios.get(baseUrl);
+		setPosts(posts.data);
+	}
+
+	useEffect(() => {
+		fetchPosts(baseUrl)
+	}, [])
 
 	const createPost = (post) => {
-		if (post.title && post.body)
-			setPosts([...posts, post])
+		setPosts([...posts, post])
+		setModal(false);
 	}
 
 	const removePost = post => {
@@ -21,13 +38,33 @@ function App() {
 
 	return (
 		<div className="App">
-			<PostForm create={createPost} />
 
-			{
-				posts.length
-					? <PostList remove={removePost} posts={posts} title={"Список JavaScript"} />
-					: <h1 style={{ textAlign: "center" }}>Посты не найдены</h1>
-			}
+			<MyButton
+				onClick={() => fetchPosts(baseUrl)}
+			>
+				Загрузить посты
+			</MyButton>
+
+			<MyButton
+				onClick={() => setModal(true)}
+				style={{ marginTop: "30px" }}
+			>
+				Создать пост
+			</MyButton>
+
+			<MyModal
+				modal={modal}
+				setModal={setModal}
+			>
+				<PostForm create={createPost} />
+			</MyModal>
+
+			<PostFilter
+				filter={filter}
+				setFilter={setFilter}
+			/>
+
+			<PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
 
 		</div>
 	);
