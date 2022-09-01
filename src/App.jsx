@@ -6,7 +6,10 @@ import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/MyModal/MyModal";
 import MyButton from "./components/UI/MyButton/MyButton";
 import { usePosts } from "./components/hooks/usePosts";
-import axios from "axios";
+import { PostService } from "./API/PostService";
+import Loader from "./components/UI/Loader/Loader";
+import { useFetching } from "./components/hooks/useFetching";
+
 
 function App() {
 	const [posts, setPosts] = useState([]);
@@ -14,17 +17,15 @@ function App() {
 	const [filter, setFilter] = useState({ sort: '', query: '' });
 	const [modal, setModal] = useState(false);
 
+	const [fetchPosts, isLoading, error] = useFetching(async () => {
+		const posts = await PostService.getAll()
+		setPosts(posts);
+	})
+
 	const filteredAndSortedPosts = usePosts(filter.sort, filter.query, posts);
 
-	const baseUrl = "https://jsonplaceholder.typicode.com/posts";
-
-	const fetchPosts = async (baseUrl) => {
-		const posts = await axios.get(baseUrl);
-		setPosts(posts.data);
-	}
-
 	useEffect(() => {
-		fetchPosts(baseUrl)
+		fetchPosts()
 	}, [])
 
 	const createPost = (post) => {
@@ -40,7 +41,7 @@ function App() {
 		<div className="App">
 
 			<MyButton
-				onClick={() => fetchPosts(baseUrl)}
+				onClick={() => fetchPosts()}
 			>
 				Загрузить посты
 			</MyButton>
@@ -63,8 +64,15 @@ function App() {
 				filter={filter}
 				setFilter={setFilter}
 			/>
-
-			<PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
+			{
+				error &&
+				<h1 style={{ textAlign: "center" }}>{error}</h1>
+			}
+			{
+				isLoading
+					? <div style={{ display: "flex", justifyContent: "center", marginTop: 50 }}><Loader /></div>
+					: <PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
+			}
 
 		</div>
 	);
