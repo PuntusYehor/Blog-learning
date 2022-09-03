@@ -20,7 +20,7 @@ function PostList({ posts, title, remove }) {
 						timeout={500}
 						classNames="post"
 					>
-						<PostItem remove={remove} post={post} number={index + 1} />
+						<PostItem remove={remove} post={post} />
 					</CSSTransition>
 
 				))}
