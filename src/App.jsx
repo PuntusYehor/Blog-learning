@@ -1,18 +1,20 @@
 import React from "react";
-import "./styles/App.css";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import PostsPage from "./components/pages/PostsPage";
 import About from "./components/pages/About";
+import MyNavbar from "./components/UI/Navbar/MyNavbar";
+import RouterComponent from "./components/router/RouterComponent";
 
 function App() {
+	const links = [
+		{ title: "Posts", path: "/posts", component: <PostsPage /> },
+		{ title: "About", path: "/about", component: <About /> }
+	]
 
 	return (
 		<BrowserRouter>
-			<Routes>
-				<Route path="/about" element={<About />} />
-				<Route path="/posts" element={<PostsPage />} />
-			</Routes>
-
+			<MyNavbar />
+			<RouterComponent routers={links} />
 		</BrowserRouter>
 	)
 

@@ -48,43 +48,46 @@ function PostsPage() {
 	}
 
 	return (
-		<div className="App">
+		<>
+			<div className="posts__page">
 
-			<MyButton
-				onClick={() => setModal(true)}
-				style={{ marginTop: "30px" }}
-			>
-				Создать пост
-			</MyButton>
+				<MyButton
+					onClick={() => setModal(true)}
+					style={{ marginTop: "30px" }}
+				>
+					Создать пост
+				</MyButton>
 
-			<MyModal
-				modal={modal}
-				setModal={setModal}
-			>
-				<PostForm create={createPost} />
-			</MyModal>
+				<MyModal
+					modal={modal}
+					setModal={setModal}
+				>
+					<PostForm create={createPost} />
+				</MyModal>
 
-			<PostFilter
-				filter={filter}
-				setFilter={setFilter}
-			/>
-			{
-				error &&
-				<h1 style={{ textAlign: "center" }}>{error}</h1>
-			}
-			{
-				isLoading
-					? <div style={{ display: "flex", justifyContent: "center", marginTop: 50 }}><Loader /></div>
-					: <PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
-			}
+				<PostFilter
+					filter={filter}
+					setFilter={setFilter}
+				/>
+				{
+					error &&
+					<h1 style={{ textAlign: "center" }}>{error}</h1>
+				}
+				{
+					isLoading
+						? <div style={{ display: "flex", justifyContent: "center", marginTop: 50 }}><Loader /></div>
+						: <PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
+				}
 
-			<Pagination
-				totalPages={totalPages}
-				page={page}
-				handleClick={handleClick}
-			/>
+				<Pagination
+					totalPages={totalPages}
+					page={page}
+					handleClick={handleClick}
+				/>
 
-		</div>
+			</div>
+		</>
+
 	);
 }
 

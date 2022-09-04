@@ -14,7 +14,7 @@ function PostList({ posts, title, remove }) {
 				{title}
 			</h1>
 			<TransitionGroup className="posts">
-				{posts.map((post, index) => (
+				{posts.map((post) => (
 					<CSSTransition
 						key={post.id}
 						timeout={500}

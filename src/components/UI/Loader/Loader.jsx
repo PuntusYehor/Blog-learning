@@ -1,9 +1,12 @@
 import React from 'react'
 import cl from "./Loader.module.css"
+import { Spinner } from 'react-bootstrap'
 
 function Loader() {
 	return (
-		<div className={cl.loader}></div>
+		<Spinner animation="border" role="status" size='m' className={cl.loader} style={{ marginBottom: "15px" }}>
+			<span className="visually-hidden">Loading...</span>
+		</Spinner>
 	)
 }
 
