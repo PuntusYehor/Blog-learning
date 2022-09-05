@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Blog-learning/static/css/main.3eaa555b.css",
+    "main.js": "/Blog-learning/static/js/main.e8931adf.js",
+    "index.html": "/Blog-learning/index.html",
+    "main.3eaa555b.css.map": "/Blog-learning/static/css/main.3eaa555b.css.map",
+    "main.e8931adf.js.map": "/Blog-learning/static/js/main.e8931adf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3eaa555b.css",
+    "static/js/main.e8931adf.js"
+  ]
+}
