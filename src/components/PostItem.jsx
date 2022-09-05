@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import MyButton from './UI/MyButton/MyButton'
 
 function PostItem({ post, remove }) {
-
+	const navigate = useNavigate();
 
 	return (
 		<div className='post'>
@@ -16,7 +16,7 @@ function PostItem({ post, remove }) {
 			</div>
 
 			<div className="post__btns">
-				<MyButton onClick={() => <Link to={"/posts/2"} />} style={{ marginRight: "5px" }}>Открыть</MyButton>
+				<MyButton onClick={() => navigate(`/posts/${post.id}`)} style={{ marginRight: "5px" }}>Открыть</MyButton>
 				<MyButton onClick={() => remove(post)}>Удалить</MyButton>
 			</div>
 
