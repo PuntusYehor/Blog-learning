@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PostList from "../PostList";
 import "../../styles/App.css";
 import PostForm from "../PostForm";
@@ -10,7 +10,7 @@ import { PostService } from "../../API/PostService";
 import Loader from "../UI/Loader/Loader";
 import { useFetching } from "../hooks/useFetching";
 import { getCount } from "../../utils/getCount";
-import Pagination from "../Pagination";
+import { useObserver } from "../hooks/useObserver";
 
 function PostsPage() {
 	const [posts, setPosts] = useState([]);
@@ -21,14 +21,20 @@ function PostsPage() {
 	const [limit, setLimit] = useState(10);
 	const [page, setPage] = useState(1);
 
+	const lastElement = useRef();
+
 	const [fetchPosts, isLoading, error] = useFetching(async () => {
 		const response = await PostService.getAll(limit, page)
-		setPosts(response.data);
+		setPosts((state) => [...state, ...response.data]);
 		const totalCount = response.headers['x-total-count'];
 		setTotalPages(getCount(totalCount, limit));
 	})
 
 	const filteredAndSortedPosts = usePosts(filter.sort, filter.query, posts);
+
+	useObserver(isLoading, lastElement, page < totalPages, () => {
+		setPage(page + 1)
+	})
 
 	useEffect(() => {
 		fetchPosts()
@@ -43,13 +49,9 @@ function PostsPage() {
 		setPosts(posts.filter(p => p.id !== post.id));
 	}
 
-	const handleClick = (p) => {
-		setPage(p)
-	}
-
 	return (
 		<>
-			<div className="posts__page">
+			<div className="container">
 
 				<MyButton
 					onClick={() => setModal(true)}
@@ -69,21 +71,18 @@ function PostsPage() {
 					filter={filter}
 					setFilter={setFilter}
 				/>
+
 				{
 					error &&
 					<h1 style={{ textAlign: "center" }}>{error}</h1>
 				}
+				<PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
 				{
-					isLoading
-						? <div style={{ display: "flex", justifyContent: "center", marginTop: 50 }}><Loader /></div>
-						: <PostList remove={removePost} posts={filteredAndSortedPosts} title={"Список JavaScript"} />
+					isLoading &&
+					<div style={{ display: "flex", justifyContent: "center", marginTop: 50 }}><Loader /></div>
 				}
 
-				<Pagination
-					totalPages={totalPages}
-					page={page}
-					handleClick={handleClick}
-				/>
+				<div style={{ width: "100%", height: "40px" }} ref={lastElement} />
 
 			</div>
 		</>

@@ -5,6 +5,8 @@ import { PostService } from '../../API/PostService'
 import { useState } from 'react'
 import Loader from '../UI/Loader/Loader'
 import { useEffect } from 'react'
+import Comments from '../Comments'
+import { Container } from 'react-bootstrap'
 
 function PostById() {
 	const params = useParams()
@@ -27,7 +29,7 @@ function PostById() {
 	}, [])
 
 	return (
-		<>
+		<div className='container'>
 			{
 				isPostLoading
 					? <Loader />
@@ -36,20 +38,17 @@ function PostById() {
 						<div className='element__body'>{post.body}</div>
 					</div>
 			}
-			<h4>Комментарии</h4>
+			{
+				comments.length
+					? <h4>Комментарии</h4>
+					: <h4>Комментариев пока нету (</h4>
+			}
 			{
 				isCommLoading
 					? <Loader />
-					: <div className='element__page comments'>
-						{comments.map(comment => (
-							<div key={comment.id}>
-								<h4>{comment.id}. {comment.name}</h4>
-								<p>{comment.body}</p>
-							</div>
-						))}
-					</div>
+					: <Comments comments={comments} />
 			}
-		</>
+		</div>
 
 	)
 }

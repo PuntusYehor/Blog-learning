@@ -2,7 +2,9 @@ import React from 'react'
 
 function About() {
 	return (
-		<div>About</div>
+		<div className='container'>
+			<h3 style={{ textAlign: "center" }}>About</h3>
+		</div>
 	)
 }
 
